@@ -1,3 +1,15 @@
+<?php
+session_start();
+if (isset($_POST['book']))
+  {
+    $book = $_POST['pid'];
+
+    session_start();
+    $_SESSION['selectedBook'] = $book;
+    header("Location: checkout.php");
+    exit();
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +21,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
+  <style>
+       .booktop{
+    margin-right: 90%;
+}
+.bookprice{
+    margin-right: 70%;
+}
+.tit{
+    text-align: center;
+    font-style: italic;
+}
+
+  </style>
 </head>
 <body>
 
@@ -34,8 +58,8 @@
 
 
         <main class="overflow">
-            <h1>Books</h1>
-            <form action="store.php" method="POST">
+            <h1 class="tit">Books</h1>
+            <form action="book.php" method="POST">
             <?php
                 require("mysqli_connect.php");
                 $q1="SELECT * FROM books";
@@ -43,25 +67,21 @@
                 if (mysqli_num_rows($r1) > 0) {
                     while($row = mysqli_fetch_assoc($r1)){
                         ?>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h2 class="card-title"> <?php echo $row['Name'] ?> </h2>
-                                    <img src="images/<?php echo $row['Image']; ?>" class="card-img-top" width="150px" height="225">
-                                    <p class="card-text">
-                                    <?php echo "price:Rs {$row['Price']}" ?>     
+                       
+                                    <h3 class="booktop"> <?php echo $row['Name'] ?> </h3>
+                                    <img src="images/<?php echo $row['Image']; ?>" class="bookimg" width="125px" height="200">
+                                    <p class="bookprice">
+                                    <?php echo "price:CAD {$row['Price']}" ?>     
                                     </p>        
-                                    <?php echo '<a href="store.php?book='. $row["PId"].'" class="cart">Buy Now</a>';?> </p>
+                                    <?php echo '<a href="checkout.php?book='. $row["PId"].'" class="cart">Buy Now</a>';?> </p>
                                     <input type="hidden" name="pid" value="<?php $row['PId'] ?>">
                                     
-                                </div>
-                            </div>
-                    </div>
-                    <?php                    
+                        
+                    <?php                       
                     }
                 }
                 else {
-                    echo "0 results";
+                    echo "0 ";
                 }
             ?>
             </form>
@@ -73,19 +93,7 @@
     </main>
     
     
-    <footer>
-        <div class=footer>
-            <div class="footer-content">
-                <h2>Follow us on</h2>
-                <a href="https://www.facebook.com/">Facebook</a>
-                <a href="https://twitter.com/explore">Twitter</a>
-                <a href="https://www.instagram.com/">Instagram</a>
-            </div>
-            <div class="fbottom">
-                &copy;2100 !! Designed at Bell Laboratories
-            </div>
-        </div>
-    </footer>
+    
 
 </body>
 

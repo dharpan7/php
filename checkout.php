@@ -1,8 +1,15 @@
 <?php
+session_start();
+if (isset($_SESSION['bookId']))
+  {
+    $book= $_SESSION['bookId'] ;
+  }
+ ?>
+<?php
 if( $_SERVER['REQUEST_METHOD']=='POST'){
     require("mysqli_connect.php");
     $errors = false;
-    $amount = $_POST['amount'];
+    
     if(empty($_REQUEST['firstname'])){
         echo "First name cannot be Empty.";
         $errors = true;
@@ -36,8 +43,17 @@ if( $_SERVER['REQUEST_METHOD']=='POST'){
         $credit_card=mysqli_real_escape_string($dbc,$creditcard);
     }
     if($errors == false){
-        $q = "INSERT INTO customers(firstname,lastname, email, creditcard,amount) VALUES ('$first_name','$last_name','$emailid','$credit_card','$amount')";
-        mysqli_query($dbc,$q);
+        $q = "INSERT INTO customers(firstname,lastname, email, creditcard,PId) VALUES ('$first_name','$last_name','$emailid','$credit_card','$book')";
+        $r1= mysqli_query($dbc,$q);
+        if($r1){
+          $message="Order successfull";
+          echo "<script type='text/javascript'>alert('$message');</script>";
+          $q3="UPDATE books 
+          SET Inventory = Inventory - 1
+          WHERE PId = $book
+          and Inventory > 0";
+          $r2 = mysqli_query($dbc,$q3);
+        }
         echo mysqli_error($dbc);
     }
 }
@@ -97,7 +113,7 @@ label {
             </nav>
         </div>
     </header>
-    <form class="for" action="ctest.php" method = "post">
+    <form class="for" action="checkout.php" method = "post">
   <div class="formInp">
     <div class="labDiv">
       <label for="fname">First Name:</label>
