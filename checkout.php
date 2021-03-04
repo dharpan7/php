@@ -1,12 +1,14 @@
 <?php
 session_start();
-if (isset($_SESSION['bookId']))
-  {
-    $book= $_SESSION['bookId'] ;
-  }
- ?>
-<?php
+
+// if (isset($_SESSION['bookId']))
+//   {
+    
+//   }
+$book= $_SESSION['selectedBook'] ;
+
 if( $_SERVER['REQUEST_METHOD']=='POST'){
+  
     require("mysqli_connect.php");
     $errors = false;
     
@@ -44,16 +46,18 @@ if( $_SERVER['REQUEST_METHOD']=='POST'){
     }
     if($errors == false){
         $q = "INSERT INTO customers(firstname,lastname, email, creditcard,PId) VALUES ('$first_name','$last_name','$emailid','$credit_card','$book')";
-        $r1= mysqli_query($dbc,$q);
-        if($r1){
+        $r2 = mysqli_query($dbc,$q);
+        if($r2){
           $message="Order successfull";
           echo "<script type='text/javascript'>alert('$message');</script>";
           $q3="UPDATE books 
-          SET Inventory = Inventory - 1
+          SET Quantity = Quantity - 1
           WHERE PId = $book
-          and Inventory > 0";
+          and Quantity > 0";
           $r2 = mysqli_query($dbc,$q3);
+      
         }
+
         echo mysqli_error($dbc);
     }
 }
@@ -96,7 +100,7 @@ label {
 }
 
     </style>
-</head>
+</head>  
 <body>
 <header>
         <div class="container">

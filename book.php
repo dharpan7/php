@@ -19,9 +19,9 @@ if (isset($_POST['book']))
     <title>Book store</title>
     <link rel="stylesheet" href="css/style.css">  
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
        .booktop{
     margin-right: 90%;
 }
@@ -67,21 +67,24 @@ if (isset($_POST['book']))
                 if (mysqli_num_rows($r1) > 0) {
                     while($row = mysqli_fetch_assoc($r1)){
                         ?>
-                       
+                        <div class="col-md-2">
+                           
                                     <h3 class="booktop"> <?php echo $row['Name'] ?> </h3>
                                     <img src="images/<?php echo $row['Image']; ?>" class="bookimg" width="125px" height="200">
                                     <p class="bookprice">
                                     <?php echo "price:CAD {$row['Price']}" ?>     
-                                    </p>        
-                                    <?php echo '<a href="checkout.php?book='. $row["PId"].'" class="cart">Buy Now</a>';?> </p>
-                                    <input type="hidden" name="pid" value="<?php $row['PId'] ?>">
+                                    </p>
+                                    <!-- <a href="checkout.php?bookid=<?php $row['PId'] ?>">Buy</a>         -->
+                                    <input type="submit" name="book" value="Buy">
+                                    <input type="hidden" name="pid" value="<?php echo $row['PId'] ?>">
                                     
-                        
-                    <?php                       
+                               
+                    </div>
+                    <?php                    
                     }
                 }
                 else {
-                    echo "0 ";
+                    echo "No  items";
                 }
             ?>
             </form>
